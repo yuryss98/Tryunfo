@@ -2,13 +2,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 class Card extends Component {
-  constructor() {
-    super();
-    this.state = {
-      isActiveButton: false,
-    };
-  }
-
   render() {
     const {
       cardName,
@@ -42,6 +35,9 @@ class Card extends Component {
         <p data-testid="rare-card">{ cardRare }</p>
 
         {
+          // linha de baixo bazicamente é o seguinte: primeiro testa se cadTrunfo e verdadeiro
+          // se for renderiza o paragrafo sintaxe :
+          // if (cardTrunfo === true (ENTÃO 'aqui é onde vem o &&') imprima 'Super Trunfo')
           cardTrunfo && <p data-testid="trunfo-card">Super Trunfo</p>
         }
 
