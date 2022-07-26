@@ -15,10 +15,26 @@ class App extends React.Component {
     saveButton: true,
   }
 
-  btnDisabledOrEnabled = () => {
+  testaPreenchimentoDosCampos = () => {
     const arr = Object.entries(this.state);
-    const naoBooleanos = arr.filter((element) => typeof element[1] === 'string');
+    const naoBooleanos = arr.filter((element) => typeof element[1] !== 'boolean');
     return naoBooleanos.every((element) => element[1].length > 0);
+  }
+
+  testaNumerosDosCampos = (param1, param2, param3) => {
+    const maxPointsAttr = 90;
+    const att1 = param1 >= 0 && param1 <= maxPointsAttr;
+    const att2 = param2 >= 0 && param2 <= maxPointsAttr;
+    const att3 = param3 >= 0 && param3 <= maxPointsAttr;
+
+    if (att1 && att2 && att3) {
+      const sumParametros = param1 + param2 + param3;
+      const sumMaxAttr = 210;
+      if (sumParametros <= sumMaxAttr) {
+        return true;
+      }
+    }
+    return false;
   }
 
   handleChange = ({ target }) => {
@@ -32,25 +48,16 @@ class App extends React.Component {
         segundoAtributo,
         terceiroAtributo,
       } = this.state;
-      const num = 90;
-      const primeiro = Number(primeiroAtributo) >= 0 && Number(primeiroAtributo) <= num;
-      const segundo = Number(segundoAtributo) >= 0 && Number(segundoAtributo) <= num;
-      const terceiro = Number(terceiroAtributo) >= 0 && Number(terceiroAtributo) <= num;
-      const maxNum = 210;
-      const sum = Number(primeiroAtributo)
-      + Number(segundoAtributo) + Number(terceiroAtributo);
-      const retorno = this.btnDisabledOrEnabled();
-      if (primeiro && segundo && terceiro) {
-        if (sum <= maxNum) {
-          if (retorno) {
-            this.setState({
-              saveButton: false,
-            });
-          } else {
-            this.setState({
-              saveButton: true,
-            });
-          }
+      const primeiro = Number(primeiroAtributo);
+      const segundo = Number(segundoAtributo);
+      const terceiro = Number(terceiroAtributo);
+      const numeros = this.testaNumerosDosCampos(primeiro, segundo, terceiro);
+      if (numeros) {
+        const retorno = this.testaPreenchimentoDosCampos();
+        if (retorno) {
+          this.setState({
+            saveButton: false,
+          });
         } else {
           this.setState({
             saveButton: true,
