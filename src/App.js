@@ -13,12 +13,18 @@ class App extends React.Component {
     raridadeCarta: 'normal',
     cardTrunfo: false,
     saveButton: true,
+    cartas: [],
   }
 
   testaPreenchimentoDosCampos = () => {
-    const arr = Object.entries(this.state);
-    const naoBooleanos = arr.filter((element) => typeof element[1] !== 'boolean');
-    return naoBooleanos.every((element) => element[1].length > 0);
+    const { nameInput,
+      descriptionInput,
+      imagemDaCarta,
+      raridadeCarta,
+    } = this.state;
+    if (!nameInput.length || !descriptionInput.length) return false;
+    if (!imagemDaCarta.length || !raridadeCarta.length) return false;
+    return true;
   }
 
   testaNumerosDosCampos = (param1, param2, param3) => {
@@ -35,6 +41,39 @@ class App extends React.Component {
       }
     }
     return false;
+  }
+
+  addCartaAoBaralho = () => {
+    const {
+      nameInput,
+      descriptionInput,
+      primeiroAtributo,
+      segundoAtributo,
+      terceiroAtributo,
+      imagemDaCarta,
+      raridadeCarta,
+      cartas,
+    } = this.state;
+    const obj = {
+      nomeDaCarta: nameInput,
+      descricao: descriptionInput,
+      attr1: primeiroAtributo,
+      attr2: segundoAtributo,
+      attr3: terceiroAtributo,
+      image: imagemDaCarta,
+      raridade: raridadeCarta,
+    };
+    cartas.push(obj);
+    this.setState(({
+      nameInput: '',
+      descriptionInput: '',
+      imagemDaCarta: '',
+      primeiroAtributo: 0,
+      segundoAtributo: 0,
+      terceiroAtributo: 0,
+      raridadeCarta: 'normal',
+      saveButton: true,
+    }));
   }
 
   handleChange = ({ target }) => {
@@ -99,7 +138,7 @@ class App extends React.Component {
           hasTrunfo=""
           isSaveButtonDisabled={ saveButton }
           onInputChange={ this.handleChange }
-          onSaveButtonClick=""
+          onSaveButtonClick={ this.addCartaAoBaralho }
         />
         <Card
           cardName={ nameInput }
