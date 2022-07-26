@@ -17,7 +17,8 @@ class App extends React.Component {
   }
 
   testaPreenchimentoDosCampos = () => {
-    const { nameInput,
+    const {
+      nameInput,
       descriptionInput,
       imagemDaCarta,
       raridadeCarta,
@@ -52,18 +53,33 @@ class App extends React.Component {
       terceiroAtributo,
       imagemDaCarta,
       raridadeCarta,
+      cardTrunfo,
       cartas,
     } = this.state;
-    const obj = {
-      nomeDaCarta: nameInput,
-      descricao: descriptionInput,
-      attr1: primeiroAtributo,
-      attr2: segundoAtributo,
-      attr3: terceiroAtributo,
-      image: imagemDaCarta,
-      raridade: raridadeCarta,
-    };
-    cartas.push(obj);
+    if (cardTrunfo) {
+      const obj = {
+        nomeDaCarta: nameInput,
+        descricao: descriptionInput,
+        attr1: primeiroAtributo,
+        attr2: segundoAtributo,
+        attr3: terceiroAtributo,
+        image: imagemDaCarta,
+        raridade: raridadeCarta,
+        superTrunfo: 'Super Trunfo',
+      };
+      cartas.push(obj);
+    } else {
+      const obj = {
+        nomeDaCarta: nameInput,
+        descricao: descriptionInput,
+        attr1: primeiroAtributo,
+        attr2: segundoAtributo,
+        attr3: terceiroAtributo,
+        image: imagemDaCarta,
+        raridade: raridadeCarta,
+      };
+      cartas.push(obj);
+    }
     this.setState(({
       nameInput: '',
       descriptionInput: '',
@@ -135,7 +151,7 @@ class App extends React.Component {
           cardImage={ imagemDaCarta }
           cardRare={ raridadeCarta }
           cardTrunfo={ cardTrunfo }
-          hasTrunfo=""
+          hasTrunfo={ cardTrunfo }
           isSaveButtonDisabled={ saveButton }
           onInputChange={ this.handleChange }
           onSaveButtonClick={ this.addCartaAoBaralho }
