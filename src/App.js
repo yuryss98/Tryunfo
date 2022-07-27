@@ -4,6 +4,8 @@ import Card from './components/Card';
 import Filter from './components/Filter';
 import buscarPorRaridade from './helpers/filterRaridade';
 
+const SUPER = 'Super trunfo';
+
 class App extends React.Component {
   state = {
     nameInput: '',
@@ -70,7 +72,7 @@ class App extends React.Component {
       raridadeCarta,
     };
     if (cardTrunfo) {
-      carta.superTrunfo = 'Super trunfo';
+      carta.superTrunfo = SUPER;
       this.setState({
         hasTrunfo: true,
       });
@@ -107,20 +109,13 @@ class App extends React.Component {
       const numeros = this.testaNumerosDosCampos(primeiro, segundo, terceiro);
       if (numeros) {
         const retorno = this.testaPreenchimentoDosCampos();
-        if (retorno) {
-          this.setState({
-            saveButton: false,
-          });
-        } else {
-          this.setState({
-            saveButton: true,
-          });
-        }
-      } else {
-        this.setState({
-          saveButton: true,
+        return this.setState({
+          saveButton: !retorno,
         });
       }
+      return this.setState({
+        saveButton: true,
+      });
     });
   }
 
@@ -138,7 +133,7 @@ class App extends React.Component {
     });
   }
 
-  trueOrFalse = (param) => param.superTrunfo === 'Super trunfo';
+  trueOrFalse = (param) => param.superTrunfo === SUPER;
 
   buscarPorNome = ({ target }) => {
     const { cartas } = this.state;
@@ -155,14 +150,6 @@ class App extends React.Component {
     });
   }
 
-  // buscarPorSuperTrunfo = () => {
-  //   const { cartas } = this.state;
-  //   const filtrar = cartas.filter((carta) => carta.superTrunfo === 'Super Trunfo');
-  //   this.setState({
-  //     cartasFiltradas: filtrar,
-  //   });
-  // }
-
   desabilitaOuHabilitaCamposFiltros = () => {
     const { disabledInputs } = this.state;
     if (disabledInputs) {
@@ -173,7 +160,7 @@ class App extends React.Component {
       });
     } else {
       const { cartas } = this.state;
-      const filtrar = cartas.filter((carta) => carta.superTrunfo === 'Super trunfo');
+      const filtrar = cartas.filter((carta) => carta.superTrunfo === SUPER);
       this.setState({
         disabledInputs: true,
         cartasFiltradas: filtrar,
