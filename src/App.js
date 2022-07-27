@@ -127,7 +127,7 @@ class App extends React.Component {
   removerCarta = ({ target }) => {
     const paiId = target.parentElement.id;
     const { cartas } = this.state;
-    if (cartas[paiId].superTrunfo === 'Super trunfo') {
+    if (cartas[paiId].superTrunfo.length > 0) {
       this.setState({
         hasTrunfo: false,
       });
@@ -144,6 +144,14 @@ class App extends React.Component {
     }
     return false;
   };
+
+  buscarCarta = ({ target }) => {
+    const { cartas } = this.state;
+    const filtrar = cartas.filter((carta) => carta.nameInput.includes(target.value));
+    this.setState({
+      cartas: filtrar,
+    });
+  }
 
   render() {
     const {
@@ -193,6 +201,13 @@ class App extends React.Component {
         <br />
         <br />
         <br />
+        <div className="buscarCarta">
+          <input
+            type="text"
+            data-testid="name-filter"
+            onChange={ this.buscarCarta }
+          />
+        </div>
         {cartas.map((carta, index) => {
           const retorno = this.trueOrFalse(carta);
           return (
