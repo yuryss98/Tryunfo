@@ -1,6 +1,8 @@
 import React from 'react';
 import Form from './components/Form';
 import Card from './components/Card';
+import Filter from './components/Filter';
+import buscarPorRaridade from './helpers/filterRaridade';
 
 class App extends React.Component {
   state = {
@@ -56,8 +58,6 @@ class App extends React.Component {
       imagemDaCarta,
       raridadeCarta,
       cardTrunfo,
-      cartas,
-      cartasFiltradas,
     } = this.state;
     const carta = {
       nameInput,
@@ -74,9 +74,7 @@ class App extends React.Component {
         hasTrunfo: true,
       });
     }
-    cartas.push(carta);
-    cartasFiltradas.push(carta);
-    this.setState(({
+    this.setState((estadoAnterior) => ({
       nameInput: '',
       descriptionInput: '',
       imagemDaCarta: '',
@@ -86,6 +84,8 @@ class App extends React.Component {
       raridadeCarta: 'normal',
       saveButton: true,
       cardTrunfo: false,
+      cartas: [...estadoAnterior.cartas, carta],
+      cartasFiltradas: [...estadoAnterior.cartasFiltradas, carta],
     }));
   }
 
@@ -139,26 +139,19 @@ class App extends React.Component {
 
   trueOrFalse = (param) => param.superTrunfo === 'Super trunfo';
 
-  buscarCarta = ({ target }) => {
-    if (target.name === 'select') {
-      const { cartas } = this.state;
-      if (target.value !== 'todas') {
-        const filtrar = cartas.filter((carta) => carta.raridadeCarta === target.value);
-        this.setState({
-          cartasFiltradas: filtrar,
-        });
-      } else {
-        this.setState({
-          cartasFiltradas: cartas,
-        });
-      }
-    } else {
-      const { cartas } = this.state;
-      const filtrar = cartas.filter((carta) => carta.nameInput.includes(target.value));
-      this.setState({
-        cartasFiltradas: filtrar,
-      });
-    }
+  buscarPorNome = ({ target }) => {
+    const { cartas } = this.state;
+    const filtrar = cartas.filter((carta) => carta.nameInput.includes(target.value));
+    this.setState({
+      cartasFiltradas: filtrar,
+    });
+  }
+
+  buscarPorRaridade = (event) => {
+    const { cartas } = this.state;
+    this.setState({
+      cartasFiltradas: buscarPorRaridade(event, cartas),
+    });
   }
 
   render() {
@@ -202,19 +195,14 @@ class App extends React.Component {
           cardRare={ raridadeCarta }
           cardTrunfo={ cardTrunfo }
         />
-        <div className="buscarCarta">
-          <input type="text" data-testid="name-filter" onChange={ this.buscarCarta } />
-          <select data-testid="rare-filter" name="select" onChange={ this.buscarCarta }>
-            <option value="todas">todas</option>
-            <option value="normal">normal</option>
-            <option value="raro">raro</option>
-            <option value="muito raro">muito raro</option>
-          </select>
-        </div>
+        <Filter
+          buscarNome={ this.buscarPorNome }
+          buscarPorRaridade={ this.buscarPorRaridade }
+        />
         {cartasFiltradas.map((carta, index) => {
           const retorno = this.trueOrFalse(carta);
           return (
-            <div key={ { index } } id={ index }>
+            <div key={ index } id={ index }>
               <Card
                 cardName={ carta.nameInput }
                 cardDescription={ carta.descriptionInput }
