@@ -15,6 +15,7 @@ class App extends React.Component {
     saveButton: true,
     hasTrunfo: false,
     cartas: [],
+    cartasFiltradas: [],
   }
 
   testaPreenchimentoDosCampos = () => {
@@ -56,6 +57,7 @@ class App extends React.Component {
       raridadeCarta,
       cardTrunfo,
       cartas,
+      cartasFiltradas,
     } = this.state;
 
     const carta = {
@@ -76,6 +78,7 @@ class App extends React.Component {
     }
 
     cartas.push(carta);
+    cartasFiltradas.push(carta);
 
     this.setState(({
       nameInput: '',
@@ -126,15 +129,18 @@ class App extends React.Component {
 
   removerCarta = ({ target }) => {
     const paiId = target.parentElement.id;
-    const { cartas } = this.state;
-    if (cartas[paiId].superTrunfo.length > 0) {
+    console.log(paiId);
+    const { cartas, cartasFiltradas } = this.state;
+    if (cartasFiltradas[paiId].superTrunfo === 'Super trunfo') {
       this.setState({
         hasTrunfo: false,
       });
     }
     cartas.splice(paiId, 1);
+    cartasFiltradas.splice(paiId, 1);
     this.setState({
       cartas,
+      cartasFiltradas,
     });
   }
 
@@ -149,8 +155,22 @@ class App extends React.Component {
     const { cartas } = this.state;
     const filtrar = cartas.filter((carta) => carta.nameInput.includes(target.value));
     this.setState({
-      cartas: filtrar,
+      cartasFiltradas: filtrar,
     });
+  }
+
+  raridade = ({ target }) => {
+    const { cartas } = this.state;
+    if (target.value !== 'todas') {
+      const filtrar = cartas.filter((carta) => carta.raridadeCarta === target.value);
+      this.setState({
+        cartasFiltradas: filtrar,
+      });
+    } else {
+      this.setState({
+        cartasFiltradas: cartas,
+      });
+    }
   }
 
   render() {
@@ -166,6 +186,7 @@ class App extends React.Component {
       hasTrunfo,
       saveButton,
       cartas,
+      cartasFiltradas,
     } = this.state;
 
     return (
@@ -207,8 +228,14 @@ class App extends React.Component {
             data-testid="name-filter"
             onChange={ this.buscarCarta }
           />
+          <select data-testid="rare-filter" onChange={ this.raridade }>
+            <option value="todas">todas</option>
+            <option value="normal">normal</option>
+            <option value="raro">raro</option>
+            <option value="muito raro">muito raro</option>
+          </select>
         </div>
-        {cartas.map((carta, index) => {
+        {cartasFiltradas.map((carta, index) => {
           const retorno = this.trueOrFalse(carta);
           return (
             <div key={ { index } } id={ index }>
