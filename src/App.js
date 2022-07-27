@@ -126,6 +126,18 @@ class App extends React.Component {
     });
   }
 
+  removerCarta = ({ target }) => {
+    const paiId = target.parentElement.id;
+    const { cartas } = this.state;
+    cartas.splice(paiId, 1);
+    this.setState({
+      cartas,
+    }, () => {
+      const vamosssssss = cartas.every((carta) => carta.superTrunfo === 'Super Trunfo');
+      console.log(vamosssssss);
+    });
+  }
+
   render() {
     const {
       nameInput,
@@ -174,17 +186,26 @@ class App extends React.Component {
         <br />
         <br />
         {cartas.map((carta, index) => (
-          <Card
-            key={ { index } }
-            cardName={ carta.nomeDaCarta }
-            cardDescription={ carta.descricao }
-            cardAttr1={ carta.attr1 }
-            cardAttr2={ carta.attr2 }
-            cardAttr3={ carta.attr3 }
-            cardImage={ carta.image }
-            cardRare={ carta.raridade }
-            cardTrunfo={ carta.superTrunfo }
-          />
+          <div key={ { index } } id={ index }>
+            <Card
+              cardName={ carta.nomeDaCarta }
+              cardDescription={ carta.descricao }
+              cardAttr1={ carta.attr1 }
+              cardAttr2={ carta.attr2 }
+              cardAttr3={ carta.attr3 }
+              cardImage={ carta.image }
+              cardRare={ carta.raridade }
+              cardTrunfo={ cardTrunfo }
+            />
+            <button
+              type="button"
+              onClick={ this.removerCarta }
+              data-testid="delete-button"
+            >
+              Excluir
+
+            </button>
+          </div>
         ))}
       </div>
     );
