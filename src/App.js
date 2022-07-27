@@ -59,7 +59,6 @@ class App extends React.Component {
       cartas,
       cartasFiltradas,
     } = this.state;
-
     const carta = {
       nameInput,
       descriptionInput,
@@ -69,17 +68,14 @@ class App extends React.Component {
       imagemDaCarta,
       raridadeCarta,
     };
-
     if (cardTrunfo) {
       carta.superTrunfo = 'Super trunfo';
       this.setState({
         hasTrunfo: true,
       });
     }
-
     cartas.push(carta);
     cartasFiltradas.push(carta);
-
     this.setState(({
       nameInput: '',
       descriptionInput: '',
@@ -129,12 +125,9 @@ class App extends React.Component {
 
   removerCarta = ({ target }) => {
     const paiId = target.parentElement.id;
-    console.log(paiId);
     const { cartas, cartasFiltradas } = this.state;
-    if (cartasFiltradas[paiId].superTrunfo === 'Super trunfo') {
-      this.setState({
-        hasTrunfo: false,
-      });
+    if (cartasFiltradas[paiId].superTrunfo) {
+      this.setState({ hasTrunfo: false });
     }
     cartas.splice(paiId, 1);
     cartasFiltradas.splice(paiId, 1);
@@ -144,31 +137,26 @@ class App extends React.Component {
     });
   }
 
-  trueOrFalse = (param) => {
-    if (param.superTrunfo === 'Super trunfo') {
-      return true;
-    }
-    return false;
-  };
+  trueOrFalse = (param) => param.superTrunfo === 'Super trunfo';
 
   buscarCarta = ({ target }) => {
-    const { cartas } = this.state;
-    const filtrar = cartas.filter((carta) => carta.nameInput.includes(target.value));
-    this.setState({
-      cartasFiltradas: filtrar,
-    });
-  }
-
-  raridade = ({ target }) => {
-    const { cartas } = this.state;
-    if (target.value !== 'todas') {
-      const filtrar = cartas.filter((carta) => carta.raridadeCarta === target.value);
+    if (target.name === 'select') {
+      const { cartas } = this.state;
+      if (target.value !== 'todas') {
+        const filtrar = cartas.filter((carta) => carta.raridadeCarta === target.value);
+        this.setState({
+          cartasFiltradas: filtrar,
+        });
+      } else {
+        this.setState({
+          cartasFiltradas: cartas,
+        });
+      }
+    } else {
+      const { cartas } = this.state;
+      const filtrar = cartas.filter((carta) => carta.nameInput.includes(target.value));
       this.setState({
         cartasFiltradas: filtrar,
-      });
-    } else {
-      this.setState({
-        cartasFiltradas: cartas,
       });
     }
   }
@@ -185,10 +173,8 @@ class App extends React.Component {
       cardTrunfo,
       hasTrunfo,
       saveButton,
-      cartas,
       cartasFiltradas,
     } = this.state;
-
     return (
       <div>
         <h1>Tryunfo</h1>
@@ -216,19 +202,9 @@ class App extends React.Component {
           cardRare={ raridadeCarta }
           cardTrunfo={ cardTrunfo }
         />
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
         <div className="buscarCarta">
-          <input
-            type="text"
-            data-testid="name-filter"
-            onChange={ this.buscarCarta }
-          />
-          <select data-testid="rare-filter" onChange={ this.raridade }>
+          <input type="text" data-testid="name-filter" onChange={ this.buscarCarta } />
+          <select data-testid="rare-filter" name="select" onChange={ this.buscarCarta }>
             <option value="todas">todas</option>
             <option value="normal">normal</option>
             <option value="raro">raro</option>
@@ -255,7 +231,6 @@ class App extends React.Component {
                 data-testid="delete-button"
               >
                 Excluir
-
               </button>
             </div>
           );
@@ -264,5 +239,4 @@ class App extends React.Component {
     );
   }
 }
-
 export default App;
