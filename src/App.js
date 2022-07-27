@@ -129,12 +129,14 @@ class App extends React.Component {
   removerCarta = ({ target }) => {
     const paiId = target.parentElement.id;
     const { cartas } = this.state;
+    if (cartas[paiId].superTrunfo.length > 0) {
+      this.setState({
+        cardTrunfo: false,
+      });
+    }
     cartas.splice(paiId, 1);
     this.setState({
       cartas,
-    }, () => {
-      const vamosssssss = cartas.every((carta) => carta.superTrunfo === 'Super Trunfo');
-      console.log(vamosssssss);
     });
   }
 
