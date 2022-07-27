@@ -18,6 +18,7 @@ class App extends React.Component {
     hasTrunfo: false,
     cartas: [],
     cartasFiltradas: [],
+    disabledInputs: false,
   }
 
   testaPreenchimentoDosCampos = () => {
@@ -154,6 +155,32 @@ class App extends React.Component {
     });
   }
 
+  // buscarPorSuperTrunfo = () => {
+  //   const { cartas } = this.state;
+  //   const filtrar = cartas.filter((carta) => carta.superTrunfo === 'Super Trunfo');
+  //   this.setState({
+  //     cartasFiltradas: filtrar,
+  //   });
+  // }
+
+  desabilitaOuHabilitaCamposFiltros = () => {
+    const { disabledInputs } = this.state;
+    if (disabledInputs) {
+      const { cartas } = this.state;
+      this.setState({
+        disabledInputs: false,
+        cartasFiltradas: cartas,
+      });
+    } else {
+      const { cartas } = this.state;
+      const filtrar = cartas.filter((carta) => carta.superTrunfo === 'Super trunfo');
+      this.setState({
+        disabledInputs: true,
+        cartasFiltradas: filtrar,
+      });
+    }
+  }
+
   render() {
     const {
       nameInput,
@@ -167,6 +194,7 @@ class App extends React.Component {
       hasTrunfo,
       saveButton,
       cartasFiltradas,
+      disabledInputs,
     } = this.state;
     return (
       <div>
@@ -198,6 +226,8 @@ class App extends React.Component {
         <Filter
           buscarNome={ this.buscarPorNome }
           buscarPorRaridade={ this.buscarPorRaridade }
+          desabilitar={ disabledInputs }
+          onChangeInputs={ this.desabilitaOuHabilitaCamposFiltros }
         />
         {cartasFiltradas.map((carta, index) => {
           const retorno = this.trueOrFalse(carta);

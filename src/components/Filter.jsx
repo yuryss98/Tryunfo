@@ -3,12 +3,21 @@ import PropTypes from 'prop-types';
 
 class Filter extends Component {
   render() {
-    const { buscarNome, buscarPorRaridade } = this.props;
+    const { buscarNome, buscarPorRaridade, desabilitar, onChangeInputs } = this.props;
     return (
       <div>
         <div className="buscarCarta">
-          <input type="text" data-testid="name-filter" onChange={ buscarNome } />
-          <select data-testid="rare-filter" onChange={ buscarPorRaridade }>
+          <input
+            type="text"
+            data-testid="name-filter"
+            disabled={ desabilitar }
+            onChange={ buscarNome }
+          />
+          <select
+            data-testid="rare-filter"
+            disabled={ desabilitar }
+            onChange={ buscarPorRaridade }
+          >
             <option value="todas">todas</option>
             <option value="normal">normal</option>
             <option value="raro">raro</option>
@@ -17,7 +26,12 @@ class Filter extends Component {
         </div>
         <div>
           <label htmlFor="super">
-            <input type="checkbox" id="super" data-testid="trunfo-filter" />
+            <input
+              type="checkbox"
+              id="super"
+              onChange={ onChangeInputs }
+              data-testid="trunfo-filter"
+            />
             Super trunfo
           </label>
         </div>
@@ -29,6 +43,8 @@ class Filter extends Component {
 Filter.propTypes = {
   buscarNome: PropTypes.func.isRequired,
   buscarPorRaridade: PropTypes.func.isRequired,
+  desabilitar: PropTypes.bool.isRequired,
+  onChangeInputs: PropTypes.func.isRequired,
 };
 
 export default Filter;
