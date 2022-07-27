@@ -13,6 +13,7 @@ class App extends React.Component {
     raridadeCarta: 'normal',
     cardTrunfo: false,
     saveButton: true,
+    hasTrunfo: false,
     cartas: [],
   }
 
@@ -56,30 +57,26 @@ class App extends React.Component {
       cardTrunfo,
       cartas,
     } = this.state;
+
+    const carta = {
+      nameInput,
+      descriptionInput,
+      primeiroAtributo,
+      segundoAtributo,
+      terceiroAtributo,
+      imagemDaCarta,
+      raridadeCarta,
+    };
+
     if (cardTrunfo) {
-      const obj = {
-        nomeDaCarta: nameInput,
-        descricao: descriptionInput,
-        attr1: primeiroAtributo,
-        attr2: segundoAtributo,
-        attr3: terceiroAtributo,
-        image: imagemDaCarta,
-        raridade: raridadeCarta,
-        superTrunfo: 'Super Trunfo',
-      };
-      cartas.push(obj);
-    } else {
-      const obj = {
-        nomeDaCarta: nameInput,
-        descricao: descriptionInput,
-        attr1: primeiroAtributo,
-        attr2: segundoAtributo,
-        attr3: terceiroAtributo,
-        image: imagemDaCarta,
-        raridade: raridadeCarta,
-      };
-      cartas.push(obj);
+      carta.superTrunfo = 'Super trunfo';
+      this.setState({
+        hasTrunfo: true,
+      });
     }
+
+    cartas.push(carta);
+
     this.setState(({
       nameInput: '',
       descriptionInput: '',
@@ -89,6 +86,7 @@ class App extends React.Component {
       terceiroAtributo: 0,
       raridadeCarta: 'normal',
       saveButton: true,
+      cardTrunfo: false,
     }));
   }
 
@@ -129,9 +127,9 @@ class App extends React.Component {
   removerCarta = ({ target }) => {
     const paiId = target.parentElement.id;
     const { cartas } = this.state;
-    if (cartas[paiId].superTrunfo.length > 0) {
+    if (cartas[paiId].superTrunfo === 'Super trunfo') {
       this.setState({
-        cardTrunfo: false,
+        hasTrunfo: false,
       });
     }
     cartas.splice(paiId, 1);
@@ -139,6 +137,13 @@ class App extends React.Component {
       cartas,
     });
   }
+
+  trueOrFalse = (param) => {
+    if (param.superTrunfo === 'Super trunfo') {
+      return true;
+    }
+    return false;
+  };
 
   render() {
     const {
@@ -150,6 +155,7 @@ class App extends React.Component {
       imagemDaCarta,
       raridadeCarta,
       cardTrunfo,
+      hasTrunfo,
       saveButton,
       cartas,
     } = this.state;
@@ -166,7 +172,7 @@ class App extends React.Component {
           cardImage={ imagemDaCarta }
           cardRare={ raridadeCarta }
           cardTrunfo={ cardTrunfo }
-          hasTrunfo={ cardTrunfo }
+          hasTrunfo={ hasTrunfo }
           isSaveButtonDisabled={ saveButton }
           onInputChange={ this.handleChange }
           onSaveButtonClick={ this.addCartaAoBaralho }
@@ -187,28 +193,31 @@ class App extends React.Component {
         <br />
         <br />
         <br />
-        {cartas.map((carta, index) => (
-          <div key={ { index } } id={ index }>
-            <Card
-              cardName={ carta.nomeDaCarta }
-              cardDescription={ carta.descricao }
-              cardAttr1={ carta.attr1 }
-              cardAttr2={ carta.attr2 }
-              cardAttr3={ carta.attr3 }
-              cardImage={ carta.image }
-              cardRare={ carta.raridade }
-              cardTrunfo={ cardTrunfo }
-            />
-            <button
-              type="button"
-              onClick={ this.removerCarta }
-              data-testid="delete-button"
-            >
-              Excluir
+        {cartas.map((carta, index) => {
+          const retorno = this.trueOrFalse(carta);
+          return (
+            <div key={ { index } } id={ index }>
+              <Card
+                cardName={ carta.nameInput }
+                cardDescription={ carta.descriptionInput }
+                cardAttr1={ carta.primeiroAtributo }
+                cardAttr2={ carta.segundoAtributo }
+                cardAttr3={ carta.terceiroAtributo }
+                cardImage={ carta.imagemDaCarta }
+                cardRare={ carta.raridadeCarta }
+                cardTrunfo={ retorno }
+              />
+              <button
+                type="button"
+                onClick={ this.removerCarta }
+                data-testid="delete-button"
+              >
+                Excluir
 
-            </button>
-          </div>
-        ))}
+              </button>
+            </div>
+          );
+        })}
       </div>
     );
   }
