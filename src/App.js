@@ -3,6 +3,7 @@ import Form from './components/Form';
 import Card from './components/Card';
 import Filter from './components/Filter';
 import buscarPorRaridade from './helpers/filterRaridade';
+import './app.css';
 
 const SUPER = 'Super trunfo';
 
@@ -185,61 +186,69 @@ class App extends React.Component {
     } = this.state;
     return (
       <div>
-        <h1>Tryunfo</h1>
-        <Form
-          cardName={ nameInput }
-          cardDescription={ descriptionInput }
-          cardAttr1={ primeiroAtributo }
-          cardAttr2={ segundoAtributo }
-          cardAttr3={ terceiroAtributo }
-          cardImage={ imagemDaCarta }
-          cardRare={ raridadeCarta }
-          cardTrunfo={ cardTrunfo }
-          hasTrunfo={ hasTrunfo }
-          isSaveButtonDisabled={ saveButton }
-          onInputChange={ this.handleChange }
-          onSaveButtonClick={ this.addCartaAoBaralho }
-        />
-        <Card
-          cardName={ nameInput }
-          cardDescription={ descriptionInput }
-          cardAttr1={ primeiroAtributo }
-          cardAttr2={ segundoAtributo }
-          cardAttr3={ terceiroAtributo }
-          cardImage={ imagemDaCarta }
-          cardRare={ raridadeCarta }
-          cardTrunfo={ cardTrunfo }
-        />
-        <Filter
-          buscarNome={ this.buscarPorNome }
-          buscarPorRaridade={ this.buscarPorRaridade }
-          desabilitar={ disabledInputs }
-          onChangeInputs={ this.desabilitaOuHabilitaCamposFiltros }
-        />
-        {cartasFiltradas.map((carta, index) => {
-          const retorno = this.trueOrFalse(carta);
-          return (
-            <div key={ index } id={ index }>
-              <Card
-                cardName={ carta.nameInput }
-                cardDescription={ carta.descriptionInput }
-                cardAttr1={ carta.primeiroAtributo }
-                cardAttr2={ carta.segundoAtributo }
-                cardAttr3={ carta.terceiroAtributo }
-                cardImage={ carta.imagemDaCarta }
-                cardRare={ carta.raridadeCarta }
-                cardTrunfo={ retorno }
-              />
-              <button
-                type="button"
-                onClick={ this.removerCarta }
-                data-testid="delete-button"
-              >
-                Excluir
-              </button>
-            </div>
-          );
-        })}
+        <header className="title">
+          <h1>Tryunfo</h1>
+        </header>
+        <main className="container">
+          <Form
+            cardName={ nameInput }
+            cardDescription={ descriptionInput }
+            cardAttr1={ primeiroAtributo }
+            cardAttr2={ segundoAtributo }
+            cardAttr3={ terceiroAtributo }
+            cardImage={ imagemDaCarta }
+            cardRare={ raridadeCarta }
+            cardTrunfo={ cardTrunfo }
+            hasTrunfo={ hasTrunfo }
+            isSaveButtonDisabled={ saveButton }
+            onInputChange={ this.handleChange }
+            onSaveButtonClick={ this.addCartaAoBaralho }
+          />
+          <Card
+            cardName={ nameInput }
+            cardDescription={ descriptionInput }
+            cardAttr1={ primeiroAtributo }
+            cardAttr2={ segundoAtributo }
+            cardAttr3={ terceiroAtributo }
+            cardImage={ imagemDaCarta }
+            cardRare={ raridadeCarta }
+            cardTrunfo={ cardTrunfo }
+          />
+        </main>
+
+        <section className="lista">
+          <Filter
+            buscarNome={ this.buscarPorNome }
+            buscarPorRaridade={ this.buscarPorRaridade }
+            desabilitar={ disabledInputs }
+            onChangeInputs={ this.desabilitaOuHabilitaCamposFiltros }
+          />
+          {cartasFiltradas.map((carta, index) => {
+            const retorno = this.trueOrFalse(carta);
+            return (
+              <div key={ index } id={ index }>
+                <Card
+                  cardName={ carta.nameInput }
+                  cardDescription={ carta.descriptionInput }
+                  cardAttr1={ carta.primeiroAtributo }
+                  cardAttr2={ carta.segundoAtributo }
+                  cardAttr3={ carta.terceiroAtributo }
+                  cardImage={ carta.imagemDaCarta }
+                  cardRare={ carta.raridadeCarta }
+                  cardTrunfo={ retorno }
+                />
+                <button
+                  type="button"
+                  onClick={ this.removerCarta }
+                  data-testid="delete-button"
+                >
+                  Excluir
+                </button>
+              </div>
+            );
+          })}
+        </section>
+
       </div>
     );
   }

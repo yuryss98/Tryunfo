@@ -15,7 +15,8 @@ class Card extends Component {
     } = this.props;
 
     return (
-      <div>
+      <div className="preview">
+        <h1>Pré vizualização</h1>
         <p data-testid="name-card">{ cardName }</p>
 
         <img
